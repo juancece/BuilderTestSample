@@ -30,5 +30,15 @@ namespace BuilderTestSample.Tests
             Assert.Throws<InvalidOrderException>(() => _orderService.PlaceOrder(order));
         }
 
+        [Fact]
+        public void ThrowsExceptionGivenOrderWith0TotalAmount()
+        {
+            var order = _orderBuilder
+                .WithTotalAmount(0)
+                .Build();
+
+            Assert.Throws<InvalidOrderException>(() => _orderService.PlaceOrder(order));
+        }
+
     }
 }
