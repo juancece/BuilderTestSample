@@ -9,6 +9,7 @@ namespace BuilderTestSample.Tests
     {
         private readonly OrderService _orderService = new ();
         private readonly OrderBuilder _orderBuilder = new ();
+        private readonly CustomerBuilder _customerBuilder = new();
 
         [Fact]
         public void CreatesOrderGivenOrderWithNoId()
@@ -48,6 +49,20 @@ namespace BuilderTestSample.Tests
                 .Build();
 
             Assert.Throws<InvalidOrderException>(() => _orderService.PlaceOrder(order));
+        }
+
+        [Fact]
+        public void ThrowsExceptionGivenOrderWithCustomerWitId0()
+        {
+            var customer = _customerBuilder
+                .WithId(0)
+                .Build();
+
+            var order = _orderBuilder
+                .WithCustomer(customer)
+                .Build();
+
+            Assert.Throws<InvalidCustomerException>(() => _orderService.PlaceOrder(order));
         }
 
     }
