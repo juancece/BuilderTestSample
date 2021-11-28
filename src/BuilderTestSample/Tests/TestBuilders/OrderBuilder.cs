@@ -1,4 +1,5 @@
 ﻿using BuilderTestSample.Model;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 namespace BuilderTestSample.Tests.TestBuilders
 {
@@ -14,9 +15,8 @@ namespace BuilderTestSample.Tests.TestBuilders
             _order.Id = 0;
             _order.TotalAmount = 100m;
 
-            // TODO: replace next lines with a CustomerBuilder you create
-            // _order.Customer = new Customer();
-            // _order.Customer.HomeAddress = new Address();
+            _order.Customer = new CustomerBuilder().Build();
+
         }
 
         public OrderBuilder WithCustomer(Customer customer)

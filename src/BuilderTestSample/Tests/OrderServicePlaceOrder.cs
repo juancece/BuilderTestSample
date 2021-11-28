@@ -19,6 +19,7 @@ namespace BuilderTestSample.Tests
                 .Build();
 
             Assert.NotNull(order);
+            Assert.Equal(CustomerBuilder.TEST_CUSTOMER_ID, order.Customer.Id);
         }
 
         [Fact]
@@ -56,6 +57,20 @@ namespace BuilderTestSample.Tests
         {
             var customer = _customerBuilder
                 .WithId(0)
+                .Build();
+
+            var order = _orderBuilder
+                .WithCustomer(customer)
+                .Build();
+
+            Assert.Throws<InvalidCustomerException>(() => _orderService.PlaceOrder(order));
+        }
+
+        [Fact]
+        public void ThrowsExceptionGivenOrderWithCustomerWithAddressNull()
+        {
+            var customer = _customerBuilder
+                .WithAddress(null)
                 .Build();
 
             var order = _orderBuilder
