@@ -1,3 +1,4 @@
+using System;
 using BuilderTestSample.Exceptions;
 using BuilderTestSample.Services;
 using BuilderTestSample.Tests.TestBuilders;
@@ -101,5 +102,23 @@ namespace BuilderTestSample.Tests
             Assert.Throws<InvalidCustomerException>(() => _orderService.PlaceOrder(order));
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(100)]
+        [InlineData(199)]
+        public void ThrowsExceptionGivenOrderWithCustomerWithCreditUnder200(int rating)
+        {
+            var customer = _customerBuilder
+                .WithCreditRating(rating)
+                .Build();
+
+            var order = _orderBuilder
+                .WithCustomer(customer)
+                .Build();
+
+            Action action = () => _orderService.PlaceOrder(order);
+
+            var exception = Assert.Throws<InsufficientCreditException>(action);
+        }
     }
 }
