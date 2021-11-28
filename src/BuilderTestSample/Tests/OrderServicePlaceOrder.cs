@@ -21,6 +21,7 @@ namespace BuilderTestSample.Tests
 
             Assert.NotNull(order);
             Assert.Equal(CustomerBuilder.TEST_CUSTOMER_ID, order.Customer.Id);
+            Assert.Equal(CustomerBuilder.TEST_CUSTOMER_TOTAL_PURCHASES, order.Customer.TotalPurchases);
         }
 
         [Fact]
@@ -119,6 +120,22 @@ namespace BuilderTestSample.Tests
             Action action = () => _orderService.PlaceOrder(order);
 
             var exception = Assert.Throws<InsufficientCreditException>(action);
+        }
+
+        [Fact]
+        public void ThrowsExceptionGivenOrderWithCustomerWithNoTotalPurchases()
+        {
+            var customer = _customerBuilder
+                .WithTotalPurchases(0m)
+                .Build();
+
+            var order = _orderBuilder
+                .WithCustomer(customer)
+                .Build();
+
+            Action action = () => _orderService.PlaceOrder(order);
+
+            var exception = Assert.Throws<InvalidCustomerException>(action);
         }
     }
 }
